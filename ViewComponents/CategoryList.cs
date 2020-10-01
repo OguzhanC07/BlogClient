@@ -12,7 +12,7 @@ namespace BlogClient.ViewComponents
         }
         
         public IViewComponentResult Invoke(){
-            return View(_categoryApiService.GetAllAsync().Result);
+            return View(_categoryApiService.GetAllWithBlogsCountAsync().Result);
         }
     }
 }

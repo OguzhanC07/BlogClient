@@ -6,6 +6,7 @@ namespace BlogClient.ApiSerices.Interfaces
 {
     public interface ICategoryApiService{
         Task<List<CategoryListModel>> GetAllAsync();
-        
+        Task<List<CategoryWithBlogCountModel>> GetAllWithBlogsCountAsync();
+        Task<CategoryListModel> GetByIdAsync(int id);
     }
 }
