@@ -1,0 +1,23 @@
+@model List<BlogListModel>
+
+
+@if(Model.Count>0){
+    @foreach (var blog in Model)
+    {
+    <div class="card mb-4">
+    <getblogimage id="@blog.Id"></getblogimage>
+    <div class="card-body">
+        <h2 class="card-title">@blog.Title</h2>
+        <p class="card-text">@blog.ShortDesc</p>
+        <a class="btn btn-primary" asp-action="PostDetail" asp-route-id="@blog.Id">Okumaya devam et &rarr;</a>
+    </div>
+    <div class="card-footer text-muted">
+            Posted on @blog.PostedTime.ToLongDateString()
+        </div>
+    </div>
+    }
+}
+
+
+
+
