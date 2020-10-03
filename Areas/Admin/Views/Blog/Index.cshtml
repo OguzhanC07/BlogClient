@@ -1,0 +1,19 @@
+@model List<BlogListModel>
+
+<a href="" class="btn btn-info btn-sm">Yeni Blog Yaz</a>
+<table class="table table-bordered table-hover py-2">
+    <tbody>
+        @foreach (var blog in Model)
+        {
+            <tr>
+                <td>
+                    @blog.Title
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="">Düzenle</a>
+                    <a class="btn btn-sm btn-danger" href="">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

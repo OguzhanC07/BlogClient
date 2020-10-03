@@ -20,7 +20,7 @@ namespace BlogClient.Controllers
         public async Task<IActionResult> SignIn(AppUserLoginModel model){
             if(await _authService.SignIn(model))
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index","Home", new {@area="Admin"});
             }
             return View();
         }
