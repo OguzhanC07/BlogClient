@@ -27,7 +27,7 @@ namespace BlogClient.TagHelpers
             }
             else
             {
-                html = $"<img class='img-fluid-rounded' src='{blob}'>";
+                html = $"<img class='card-img-top' src='{blob}'>";
             }
 
 

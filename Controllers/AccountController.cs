@@ -22,7 +22,17 @@ namespace BlogClient.Controllers
             {
                 return RedirectToAction("Index","Home", new {@area="Admin"});
             }
-            return View();
+            else if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(model.Password)){
+                return View(model);
+            }
+            else
+            {
+                ModelState.AddModelError("","Kullanıcı adi veya şifre hatalı");
+                return View(model);
+            }
+           
+            
+
         }
     }
 }

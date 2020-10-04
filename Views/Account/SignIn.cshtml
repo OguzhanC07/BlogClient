@@ -16,17 +16,24 @@
     <form asp-action="SignIn" method="POST" class="w-50 mt-4 p-3 mx-auto shadow">
     <div class="form-group">
         <label for="UserName">Kullanıcı Adı:</label>
+        <span class="text-danger" asp-validation-for="@Model.UserName"></span>
         <input asp-for="@Model.UserName" class="form-control" type="text">
     </div>
     <div class="form-group">
         <label for="Password">Şifre :</label>
+        <span class="text-danger" asp-validation-for="@Model.Password"></span>
         <input asp-for="@Model.Password" class="form-control" type="password">
     </div>
     <div class="form-group">
         <button class="btn btn-primary" type="submit">Giriş Yap</button>
     </div>
+
+    <div asp-validation-summary="ModelOnly"></div>
 </form>
 
+ <script src="~/lib/jquery/jquery.min.js"></script>
+ <script src="~/lib/jqueryValidate/jquery.validate.min.js"></script>
+ <script src="~/lib/jqueryUnob/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>
 

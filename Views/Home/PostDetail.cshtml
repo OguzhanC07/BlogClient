@@ -21,7 +21,7 @@
         <getblogimage id="@Model.Id" blog-image-type="@BlogImageType.BlogDetail"></getblogimage>
 
         <hr>
-          @Model.Description
+          @Html.Raw(Model.Description)
         <hr>
 
         <!-- Comments Form -->

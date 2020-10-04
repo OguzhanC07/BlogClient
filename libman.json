@@ -9,6 +9,20 @@
     {
       "library": "twitter-bootstrap@4.5.2",
       "destination": "wwwroot\\lib\\bootstrap"
+    },
+    {
+      "library": "jquery-validate@1.19.2",
+      "destination": "wwwroot/lib/jqueryValidate",
+      "files": [
+        "jquery.validate.min.js"
+      ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.11",
+      "destination": "wwwroot/lib/jqueryUnob",
+      "files": [
+        "jquery.validate.unobtrusive.min.js"
+      ]
     }
   ]
 }
