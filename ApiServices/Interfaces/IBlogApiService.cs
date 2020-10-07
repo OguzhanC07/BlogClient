@@ -9,5 +9,7 @@ namespace BlogClient.ApiSerices.Interfaces
         Task<BlogListModel> GetByIdAsync(int id);
         Task<List<BlogListModel>> GetAllByCategoryId(int id);
         Task AddAsync(BlogAddModel model);
+        Task UpdateAsync(BlogUpdateModel model);
+        Task DeleteAsync(int id);
     }
 }

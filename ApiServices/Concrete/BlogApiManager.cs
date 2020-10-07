@@ -100,5 +100,50 @@ namespace BlogClient.ApiSerices.Concrete
 
             await _httpClient.PostAsync("", formData);
         }
+
+
+        public async Task UpdateAsync(BlogUpdateModel model)
+        {
+            MultipartFormDataContent formData = new MultipartFormDataContent();
+              if (model.Image != null)
+            {
+                var stream = new MemoryStream();
+                await model.Image.CopyToAsync(stream);
+                var bytes = stream.ToArray();
+                //resimi bytlera çevirme işlemi
+                ByteArrayContent byteContent = new ByteArrayContent(bytes);
+
+                //content type kaybetmemek için
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue(model.Image.ContentType);
+
+                //resimi byte şeklinde ekleme, türünü yazma ve dosya adını yazma
+                formData.Add(byteContent, nameof(BlogAddModel.Image), model.Image.FileName);
+            }
+
+            
+            var user = _httpContextAccessor.HttpContext.Session.GetObject<AppUserViewModel>("activeUser");
+            model.AppUserId = user.Id;
+
+            formData.Add(new StringContent(model.AppUserId.ToString()), nameof(BlogAddModel.AppUserId));
+
+            formData.Add(new StringContent(model.Id.ToString()),nameof(model.Id));
+            formData.Add(new StringContent(model.Title),nameof(model.Title));
+            formData.Add(new StringContent(model.ShortDesc),nameof(model.ShortDesc));
+            formData.Add(new StringContent(model.Description), nameof(model.Description));
+
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString("token"));
+            await _httpClient.PutAsync($"{model.Id}",formData);
+            
+        }
+        // var responsemessage = ..... _htppclient.GetAsync();
+
+        public async Task DeleteAsync(int id)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization=new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString("token"));
+
+            await _httpClient.DeleteAsync($"{id}");
+            
+        }
     }
 }

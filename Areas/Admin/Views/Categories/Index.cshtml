@@ -1,22 +1,23 @@
-@model List<BlogListModel>
+@model List<CategoryListModel>
 
-<a asp-action="Create" class="btn btn-info btn-sm">Yeni Blog Yaz</a>
+<a asp-action="Create" class="btn btn-info btn-sm">Yeni Kategori Ekle</a>
 <table class="table table-bordered table-hover py-2">
     <tbody>
-        @foreach (var blog in Model)
+        @foreach (var category in Model)
         {
             <tr>
                 <td>
-                    @blog.Title
+                    @category.Name
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-warning" asp-action="Update" asp-route-id="@blog.Id">Düzenle</a>
-                    <a class="btn btn-sm btn-danger"  data-id="@blog.Id" data-toggle="modal" data-target="#exampleModal">Sil</a>
+                    <a class="btn btn-sm btn-warning" asp-action="Update" asp-route-id="@category.Id">Düzenle</a>
+                    <a class="btn btn-sm btn-danger"  data-id="@category.Id" data-toggle="modal" data-target="#exampleModal">Sil</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -43,9 +44,7 @@
     <script>
       $(".btn.btn-sm.btn-danger").on('click', function() {
       var id =$(this).data("id");
-      $('#btnDelete').attr('href','/Admin/Blog/Delete/'+id.toString());
+      $('#btnDelete').attr('href','/Admin/Categories/Delete/'+id.toString());
     }); 
     </script>
 }
-
-

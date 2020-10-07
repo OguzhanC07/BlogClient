@@ -21,13 +21,12 @@ namespace BlogClient.TagHelpers
             var blob = await _imageApiService.GetBlogImageByIdAsync(Id);
             string html = string.Empty;
 
-            if (BlogImageType == BlogImageType.BlogHome)
+            if (BlogImageType == BlogImageType.BlogHome || BlogImageType == BlogImageType.BlogDetail)
             {
                 html = $"<img class='card-img-top' src='{blob}'>";
             }
-            else
-            {
-                html = $"<img class='card-img-top' src='{blob}'>";
+            else{
+                html = $"<img class='w-100' sytle='height:10rem!important;' src='{blob}'";
             }
 
 
