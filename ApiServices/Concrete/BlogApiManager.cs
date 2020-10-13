@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Blogclient.Extensions;
 using BlogClient.ApiSerices.Interfaces;
@@ -105,7 +106,7 @@ namespace BlogClient.ApiSerices.Concrete
         public async Task UpdateAsync(BlogUpdateModel model)
         {
             MultipartFormDataContent formData = new MultipartFormDataContent();
-              if (model.Image != null)
+            if (model.Image != null)
             {
                 var stream = new MemoryStream();
                 await model.Image.CopyToAsync(stream);
@@ -120,30 +121,106 @@ namespace BlogClient.ApiSerices.Concrete
                 formData.Add(byteContent, nameof(BlogAddModel.Image), model.Image.FileName);
             }
 
-            
+
             var user = _httpContextAccessor.HttpContext.Session.GetObject<AppUserViewModel>("activeUser");
             model.AppUserId = user.Id;
 
             formData.Add(new StringContent(model.AppUserId.ToString()), nameof(BlogAddModel.AppUserId));
 
-            formData.Add(new StringContent(model.Id.ToString()),nameof(model.Id));
-            formData.Add(new StringContent(model.Title),nameof(model.Title));
-            formData.Add(new StringContent(model.ShortDesc),nameof(model.ShortDesc));
+            formData.Add(new StringContent(model.Id.ToString()), nameof(model.Id));
+            formData.Add(new StringContent(model.Title), nameof(model.Title));
+            formData.Add(new StringContent(model.ShortDesc), nameof(model.ShortDesc));
             formData.Add(new StringContent(model.Description), nameof(model.Description));
 
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString("token"));
-            await _httpClient.PutAsync($"{model.Id}",formData);
-            
+            await _httpClient.PutAsync($"{model.Id}", formData);
+
         }
         // var responsemessage = ..... _htppclient.GetAsync();
 
         public async Task DeleteAsync(int id)
         {
-            _httpClient.DefaultRequestHeaders.Authorization=new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString("token"));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString("token"));
 
             await _httpClient.DeleteAsync($"{id}");
-            
+
         }
+
+
+        public async Task<List<CommentListModel>> GetCommentsAsync(int blogId, int? parentCommentId)
+        {
+            var responseMessage = await _httpClient.GetAsync($"{blogId}/GetComments?parentCommentId={parentCommentId}");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var jsonData = JsonConvert.DeserializeObject<List<CommentListModel>>(await responseMessage.Content.ReadAsStringAsync());
+                return jsonData;
+            }
+            else
+                return null;
+
+        }
+
+        public async Task AddCommentAsync(CommentAddModel model)
+        {
+            var jsonData = JsonConvert.SerializeObject(model);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            await _httpClient.PostAsync("AddComment", content);
+        }
+
+        public async Task<List<CategoryListModel>> GetCategoriesAsync(int blogId)
+        {
+            var responseMessage = await _httpClient.GetAsync($"{blogId}/GetCategories");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<List<CategoryListModel>>(await responseMessage.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<BlogListModel>> GetLastFiveAsync()
+        {
+            var responseMessage = await _httpClient.GetAsync("GetLastFiveBlog");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<List<BlogListModel>>(await responseMessage.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<BlogListModel>> SearchAsync(string s)
+        {
+            var responseMessage = await _httpClient.GetAsync($"Search?s={s}");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<List<BlogListModel>>(await responseMessage.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task AddToCategoryAsync(CategoryBlogModel model)
+        {
+
+            var jsonData = JsonConvert.SerializeObject(model);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("AddToCategory", content);
+        }
+
+        public async Task RemoveFromCategoryAsync(CategoryBlogModel model)
+        {
+            var response = await _httpClient.DeleteAsync($"RemoveFromCategory?{nameof(CategoryBlogModel.CategoryId)}={model.CategoryId}&{nameof(CategoryBlogModel.BlogId)}={model.BlogId}");
+        }
+
     }
 }

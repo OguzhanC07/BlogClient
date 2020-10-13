@@ -11,5 +11,6 @@ namespace BlogClient.ApiSerices.Interfaces
         Task AddAsync(CategoryAddModel model);
         Task UpdateAsync(CategoryUpdateModel model);
         Task DeleteAsync(int id);
+        
     }
 }
